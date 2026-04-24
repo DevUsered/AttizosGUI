@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #13111b;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Attizos.Frontend.DashboardController">
+
+    <left>
+        <VBox prefWidth="260.0" spacing="5.0" style="-fx-background-color: #1c1a24; -fx-border-color: #2b2738; -fx-border-width: 0 1 0 0;">
+            <children>
+                <VBox alignment="CENTER" spacing="10.0" style="-fx-padding: 30 0 30 0;">
+                    <children>
+                        <Label text="ATTIZOS" textFill="#8b5cf6">
+                            <font>
+                                <Font name="System Bold" size="28.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblRol" text="ADMINISTRADOR" textFill="#7a7a7a" style="-fx-letter-spacing: 2;">
+                            <font>
+                                <Font size="10.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+
+                <Separator opacity="0.1" />
+
+                <VBox spacing="8.0" style="-fx-padding: 20;">
+                    <children>
+                        <Button fx:id="btnInicio" onAction="#mostrarInicio" maxWidth="Infinity" styleClass="menu-button" text="🏠  Inicio" style="-fx-background-color: #2b2738; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 12; -fx-background-radius: 10; -fx-cursor: hand;" />
+                        <Button fx:id="btnVentas" onAction="#mostrarVentas" maxWidth="Infinity" styleClass="menu-button" text="💰  Punto de Venta (Caja)" style="-fx-background-color: transparent; -fx-text-fill: #a0a0a0; -fx-alignment: CENTER_LEFT; -fx-padding: 12; -fx-cursor: hand;" />
+                        <Button fx:id="btnInventario" onAction="#mostrarInventario" maxWidth="Infinity" styleClass="menu-button" text="📦  Almacén e Insumos" style="-fx-background-color: transparent; -fx-text-fill: #a0a0a0; -fx-alignment: CENTER_LEFT; -fx-padding: 12; -fx-cursor: hand;" />
+                        <Button fx:id="btnMenu" onAction="#mostrarMenu" maxWidth="Infinity" styleClass="menu-button" text="🍕  Gestión del Menú" style="-fx-background-color: transparent; -fx-text-fill: #a0a0a0; -fx-alignment: CENTER_LEFT; -fx-padding: 12; -fx-cursor: hand;" />
+                        <Button fx:id="btnPersonal" onAction="#mostrarPersonal" maxWidth="Infinity" styleClass="menu-button" text="👥  Recursos Humanos" style="-fx-background-color: transparent; -fx-text-fill: #a0a0a0; -fx-alignment: CENTER_LEFT; -fx-padding: 12; -fx-cursor: hand;" />
+                        <Button fx:id="btnReportes" onAction="#mostrarReportes" maxWidth="Infinity" styleClass="menu-button" text="📊  Reportes y Gráficos" style="-fx-background-color: transparent; -fx-text-fill: #a0a0a0; -fx-alignment: CENTER_LEFT; -fx-padding: 12; -fx-cursor: hand;" />
+                    </children>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <VBox style="-fx-padding: 20;">
+                    <Button onAction="#handleCerrarSesion" maxWidth="Infinity" style="-fx-background-color: #ff4c4c22; -fx-text-fill: #ff4c4c; -fx-font-weight: bold; -fx-padding: 12; -fx-background-radius: 10; -fx-cursor: hand;" text="🚪 Cerrar Sesión" />
+                </VBox>
+            </children>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="30.0" style="-fx-padding: 40;">
+            <children>
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <VBox>
+                            <children>
+                                <Label fx:id="lblBienvenida" text="¡Bienvenido, Edgar!" textFill="WHITE">
+                                    <font>
+                                        <Font name="System Bold" size="32.0" />
+                                    </font>
+                                </Label>
+                                <Label text="Aquí tienes el resumen de hoy en la pizzería." textFill="#7a7a7a" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <HBox spacing="20.0">
+                    <children>
+                        <VBox prefWidth="250.0" style="-fx-background-color: #1c1a24; -fx-padding: 20; -fx-background-radius: 15; -fx-border-color: #2b2738; -fx-border-radius: 15;">
+                            <children>
+                                <Label text="Ventas del Día" textFill="#7a7a7a" />
+                                <Label text="Bs. 1,250.00" textFill="#4caf50">
+                                    <font>
+                                        <Font name="System Bold" size="24.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                        <VBox prefWidth="250.0" style="-fx-background-color: #1c1a24; -fx-padding: 20; -fx-background-radius: 15; -fx-border-color: #2b2738; -fx-border-radius: 15;">
+                            <children>
+                                <Label text="Pedidos en Cola" textFill="#7a7a7a" />
+                                <Label text="5" textFill="#8b5cf6">
+                                    <font>
+                                        <Font name="System Bold" size="24.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                        <VBox prefWidth="250.0" style="-fx-background-color: #1c1a24; -fx-padding: 20; -fx-background-radius: 15; -fx-border-color: #2b2738; -fx-border-radius: 15;">
+                            <children>
+                                <Label text="Insumos Críticos" textFill="#7a7a7a" />
+                                <Label text="3" textFill="#ff9800">
+                                    <font>
+                                        <Font name="System Bold" size="24.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS" style="-fx-background-color: #1c1a24; -fx-background-radius: 20; -fx-padding: 20;">
+                    <children>
+                        <Label text="Gráfico de ventas o actividad reciente..." textFill="#444444" />
+                    </children>
+                </StackPane>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

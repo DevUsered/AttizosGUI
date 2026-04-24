@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER_LEFT" prefHeight="350.0" prefWidth="380.0" spacing="25.0" style="-fx-background-color: #2b2738; -fx-padding: 40;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Attizos.Frontend.LoginController">
+    <children>
+
+        <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <children>
+                <ImageView fx:id="logoEmpresa" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@logo.png" />
+               </image></ImageView>
+                <Label text="Login" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+
+        <VBox spacing="15.0">
+            <children>
+                <TextField fx:id="txtUsuario" onAction="#enfocarPassword" promptText="Usuario" style="-fx-background-color: #1c1a24; -fx-text-fill: white; -fx-prompt-text-fill: #7a7a7a; -fx-background-radius: 10; -fx-padding: 12; -fx-font-size: 14px;" />
+                <PasswordField fx:id="txtPassword" onAction="#iniciarSesion" promptText="Contraseña" style="-fx-background-color: #1c1a24; -fx-text-fill: white; -fx-prompt-text-fill: #7a7a7a; -fx-background-radius: 10; -fx-padding: 12; -fx-font-size: 14px;" />
+            </children>
+        </VBox>
+
+        <Label fx:id="lblMensaje" alignment="CENTER" maxWidth="Infinity" style="-fx-text-fill: #ff4c4c; -fx-font-size: 12px; -fx-font-weight: bold;" />
+
+        <Button fx:id="btnLogin" maxWidth="Infinity" mnemonicParsing="false" onAction="#iniciarSesion" style="-fx-background-color: #8b5cf6; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 15px; -fx-background-radius: 10; -fx-padding: 12; -fx-cursor: hand;" text="Iniciar Sesión" />
+    </children>
+</VBox>
