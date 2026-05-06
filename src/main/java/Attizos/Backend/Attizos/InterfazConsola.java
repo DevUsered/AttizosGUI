@@ -1,7 +1,5 @@
 package Attizos.Backend.Attizos;
 
-
-
 import Attizos.Backend.Listas.*;
 
 import java.time.LocalDate;
@@ -301,7 +299,7 @@ public class InterfazConsola {
                     inv.mostrarCompraSugerida();
                     break;
                 case 3:
-                    registrarIngresoInsumo(inv);
+                    registrarIngresoInsumo(inv, restaurante);
                     break;
                 case 4:
                     registrarNuevoInsumo(inv);
@@ -443,7 +441,7 @@ public class InterfazConsola {
             System.out.println("❌ Opción no válida.");
         }
     }
-    private static void registrarIngresoInsumo(Inventario inv) {
+    private static void registrarIngresoInsumo(Inventario inv, Restaurante restaurante) {
         System.out.println("\n--- REGISTRAR INGRESO DE INSUMOS ---");
         System.out.print("Ingrese el código exacto (Ej: I001) o el nombre para buscar: ");
         String entrada = sc.nextLine().trim();
@@ -486,6 +484,7 @@ public class InterfazConsola {
             System.out.println("⚠️ La cantidad debe ser mayor a 0. Intente de nuevo: ");
             cant = leerDouble();
         }
+        double costoTotal = calcularCostoCompra(cant);
 
         LocalDate nuevaFecha = null;
         while(nuevaFecha == null) {
@@ -543,6 +542,8 @@ public class InterfazConsola {
             inv.agregarInsumo(nuevoLote);
 
             System.out.println("✅ Ingreso registrado como un NUEVO LOTE por diferencia de fechas.");
+            restaurante.registerExpense(new Egreso("Compra Insumo: " + insBase.getNombre() + " (" + cant + " " + insBase.getUnidad() + ")", costoTotal));
+            System.out.println("💸 Gasto de Bs. " + costoTotal + " registrado en los egresos.");
         }
     }
 
@@ -835,13 +836,13 @@ public class InterfazConsola {
         }
     }
 
-    private static void consultarPorCategoria(Restaurante restaurante) {
+    /*private static void consultarPorCategoria(Restaurante restaurante) {
         System.out.print("\nIngrese categoría a buscar: ");
         String cat = sc.nextLine();
         ListaDE<Producto> lista = restaurante.buscarPorCategoria(cat);
         if (lista.getCabeza() != null) lista.mostrarLista();
         else System.out.println("❌ No hay productos en esa categoría.");
-    }
+    }*/
 
     private static void editarProducto(Restaurante restaurante) {
         System.out.print("\nID del producto a editar: ");
@@ -871,6 +872,9 @@ public class InterfazConsola {
                 System.out.print("Cantidad a SUMAR: ");
                 double sumar = leerDouble();
                 if (sumar > 0) {
+                    double costoTotal = calcularCostoCompra(sumar);
+                    restaurante.registerExpense(new Egreso("Compra Mercadería: " + p.getNombre() + " (" + sumar + " und)", costoTotal));
+                    System.out.println("💸 Gasto de Bs. " + costoTotal + " registrado en los egresos.");
                     p.setStock(p.getStock() + sumar);
                     System.out.println("✅ Stock aumentado. Nuevo total: " + p.getStock() + " und");
                 } else {
@@ -909,7 +913,8 @@ public class InterfazConsola {
     private static void menuReportes(Restaurante restaurante) {
         System.out.println("\n--- REPORTES FINANCIEROS ---");
         System.out.println("1. Reporte de Caja Diario (Hoy)");
-        System.out.println("2. Reporte General Mensual");
+        System.out.println("2. Reporte General Mensual (Ventas totales)");
+        System.out.println("3. Ver Detalle de Gastos (Por Mes)"); // NUEVA OPCIÓN
         System.out.print("Seleccione: ");
         int op = leerEntero();
 
@@ -921,6 +926,12 @@ public class InterfazConsola {
             System.out.print("Ingrese el año (Ej. " + LocalDate.now().getYear() + "): ");
             int anio = leerEntero();
             Reporte.generarReporteMensual(restaurante, mes, anio);
+        } else if (op == 3) {
+            System.out.print("Ingrese el número de mes (1-12): ");
+            int mes = leerEntero();
+            System.out.print("Ingrese el año (Ej. " + LocalDate.now().getYear() + "): ");
+            int anio = leerEntero();
+            Reporte.mostrarDetalleEgresosMensual(restaurante, mes, anio); // LLAMAMOS AL NUEVO MÉTODO
         } else {
             System.out.println("❌ Opción inválida.");
         }
@@ -1125,5 +1136,39 @@ public class InterfazConsola {
             }
         }
         return cargoSeleccionado;
+    }
+    private static double calcularCostoCompra(double cantidad) {
+        int op = 0;
+        while (op != 1 && op != 2) {
+            System.out.println("\n💰 ¿Cómo desea registrar el costo de esta compra?");
+            System.out.println("[1] Precio TOTAL (Ej: Pagué 100 Bs por toda la caja/lote)");
+            System.out.println("[2] Precio UNITARIO (Ej: Cada unidad me costó 5 Bs)");
+            System.out.print("Seleccione: ");
+
+            op = leerEntero();
+
+            if (op == 1) {
+                System.out.print("Ingrese el precio TOTAL pagado (Bs): ");
+                double pTotal = leerDouble();
+                while(pTotal < 0){
+                    System.out.print("⚠️ El precio no puede ser negativo. Intente de nuevo: Bs. ");
+                    pTotal = leerDouble();
+                }
+                return pTotal;
+
+            } else if (op == 2) {
+                System.out.print("Ingrese el precio UNITARIO (Bs): ");
+                double pUnitario = leerDouble();
+                while(pUnitario < 0){
+                    System.out.print("⚠️ El precio no puede ser negativo. Intente de nuevo: Bs. ");
+                    pUnitario = leerDouble();
+                }
+                return pUnitario * cantidad;
+
+            } else {
+                System.out.println("❌ Opción inválida. Por favor, ingrese 1 o 2.");
+            }
+        }
+        return 0;
     }
 }

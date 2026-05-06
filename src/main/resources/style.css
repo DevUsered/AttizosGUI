@@ -1,0 +1,29 @@
+
+.dark-table {
+    -fx-background-color: #0f0d14;
+    -fx-border-color: #2b2738;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+.dark-table .column-header-background {
+    -fx-background-color: #2b2738;
+}
+.dark-table .column-header, .dark-table .filler {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.dark-table .table-row-cell {
+    -fx-background-color: #1c1a24;
+    -fx-text-fill: white;
+}
+.dark-table .table-row-cell:odd {
+    -fx-background-color: #16141f;
+}
+.dark-table .table-row-cell:selected {
+    -fx-background-color: #8b5cf6;
+    -fx-text-fill: white;
+}
+.dark-table .table-cell {
+    -fx-text-fill: white;
+}

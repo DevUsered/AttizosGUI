@@ -1,13 +1,20 @@
 package Attizos.Frontend;
 
 import Attizos.Backend.Attizos.App;
+import Attizos.Backend.Attizos.Cocinero;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 public class LoginController {
     @FXML private ImageView logoEmpresa;
     @FXML private TextField txtUsuario;
@@ -24,8 +31,30 @@ public class LoginController {
         String password = txtPassword.getText();
 
       if(App.validarAcceso(username, password)){
-          lblMensaje.setStyle("-fx-text-fill: #4caf50;");
-          lblMensaje.setText("✅ ¡Bienvenido a Attizos!");
+          try{
+              String vistaDestino = "/Dashboard.fxml";
+              String tituloVentana = "AttizosPOS - Panel de Control";
+              if(App.usuarioLogueado instanceof Cocinero){
+                  vistaDestino = "/Cocina.fxml";
+                  tituloVentana = "AttizosPOS - Monitor de Cocina";
+              }
+              FXMLLoader loader = new FXMLLoader(getClass().getResource(vistaDestino));
+              Parent root = loader.load();
+
+              Stage stage = new Stage();
+              stage.setTitle(tituloVentana);
+              stage.setScene(new Scene(root));
+
+              if (App.usuarioLogueado instanceof Cocinero) {
+                  stage.setMaximized(true);
+              }
+              stage.show();
+              Stage loginStage = (Stage) btnLogin.getScene().getWindow();
+              loginStage.close();
+          }catch (IOException e){
+              e.printStackTrace();
+              lblMensaje.setText("❌ Error al cargar la interfaz");
+          }
       }else{
           lblMensaje.setStyle("-fx-text-fill: #ff4c4c;");
           lblMensaje.setText("❌ Usuario o contraseña incorrectos");

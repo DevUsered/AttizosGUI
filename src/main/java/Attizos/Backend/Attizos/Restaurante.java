@@ -1,8 +1,6 @@
 package Attizos.Backend.Attizos;
 
-
 import Attizos.Backend.Listas.*;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,6 +17,7 @@ public class Restaurante
     private ListaDE<Factura> historialVentas;
     private LocalDate fechaFacturacion;
     private int contadorFacturasDiarias;
+    private ListaDE<Egreso> expenseHistory;
 
     public Restaurante(String nombre){
         this.nombre = nombre;
@@ -29,6 +28,7 @@ public class Restaurante
         this.colaPedidos = new ListaDE<>();
         this.historialVentas = new ListaDE<>();
         this.fechaFacturacion = LocalDate.now();
+        this.expenseHistory = new ListaDE<>();
         this.contadorFacturasDiarias = 0;
     }
     public void agregarProducto(Producto nuevo) {
@@ -310,5 +310,11 @@ public class Restaurante
             }
         }
         return false;
+    }
+    public void registerExpense(Egreso egreso){
+        expenseHistory.insertarAlFinal(egreso);
+    }
+    public ListaDE<Egreso> getExpenseHistory() {
+        return expenseHistory;
     }
 }

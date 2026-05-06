@@ -15,6 +15,7 @@ public class Reporte {
         System.out.println("=================================================");
 
         double totalIngresos = 0.0;
+        double totalEgresos = 0.0;
         int cantidadPedidos = 0;
         HashMap<String, Integer> productosVendidos = new HashMap<>();
 
@@ -38,8 +39,25 @@ public class Reporte {
             }
             auxF = auxF.getSiguiente();
         }
+        System.out.println("DETALLE DE GASTOS DE HOY:");
+        boolean hayGastosHoy = false;
+        NodoDE<Egreso> auxE = restaurante.getExpenseHistory().getCabeza();
+        while(auxE != null) {
+            if(auxE.getDato().getDate().isEqual(hoy)) {
+                System.out.printf("  - %-25s : Bs. %.2f\n", auxE.getDato().getDescription(), auxE.getDato().getTotalAmount());
+                totalEgresos += auxE.getDato().getTotalAmount();
+                hayGastosHoy = true;
+            }
+            auxE = auxE.getSiguiente();
+        }
+        if (!hayGastosHoy) {
+            System.out.println("  (No se registraron gastos hoy)");
+        }
+        System.out.println("-------------------------------------------------");
         System.out.printf("Pedidos despachados hoy: %d\n", cantidadPedidos);
-        System.out.printf("INGRESOS TOTALES:        Bs. %.2f\n", totalIngresos);
+        System.out.printf("📈 INGRESOS TOTALES:        Bs. %.2f\n", totalIngresos);
+        System.out.printf("📉 EGRESOS (COMPRAS):       Bs. %.2f\n", totalEgresos);
+        System.out.printf("💰 UTILIDAD BRUTA DEL DÍA:  Bs. %.2f\n", (totalIngresos - totalEgresos));
         System.out.println("-------------------------------------------------");
         System.out.println("RESUMEN DE PRODUCTOS VENDIDOS HOY:");
 
@@ -56,17 +74,43 @@ public class Reporte {
         }
         System.out.println("=================================================");
     }
+    public static void mostrarDetalleEgresosMensual(Restaurante restaurante, int mes, int anio){
+        System.out.println("\n=================================================");
+        System.out.println("      DETALLE DE EGRESOS - " + mes + "/" + anio);
+        System.out.println("=================================================");
+
+        double totalEgresos = 0;
+        boolean hayEgresos = false;
+
+        NodoDE<Egreso> aux = restaurante.getExpenseHistory().getCabeza();
+        while(aux != null){
+            Egreso e = aux.getDato();
+            if(e.getDate().getMonthValue() == mes && e.getDate().getYear() == anio){
+                System.out.printf("[%s] %-30s | Bs. %.2f\n",
+                        e.getDate().toString(), e.getDescription(), e.getTotalAmount());
+                totalEgresos += e.getTotalAmount();
+                hayEgresos = true;
+            }
+            aux = aux.getSiguiente();
+        }
+        if (!hayEgresos) {
+            System.out.println("  (No se registraron gastos en este mes)");
+        }
+        System.out.println("-------------------------------------------------");
+        System.out.printf("TOTAL GASTADO EN EL MES: Bs. %.2f\n", totalEgresos);
+        System.out.println("=================================================");
+    }
     public static void generarReporteMensual(Restaurante restaurante, int mes, int anio) {
         System.out.println("\n=================================================");
         System.out.println("       REPORTE FINANCIERO MENSUAL - " + mes + "/" + anio);
         System.out.println("=================================================");
 
         double totalIngresosMes = 0.0;
+        double totalEgresosMes = 0.0;
         int cantidadPedidosMes = 0;
         HashMap<String, Integer> productosVendidosMes = new HashMap<>();
 
         NodoDE<Factura> auxF = restaurante.getHistorialVentas().getCabeza();
-
         while (auxF != null) {
             Factura f = auxF.getDato();
             // Filtramos por mes y año
@@ -84,9 +128,20 @@ public class Reporte {
             }
             auxF = auxF.getSiguiente();
         }
+        NodoDE<Egreso> auxE = restaurante.getExpenseHistory().getCabeza();
+        while(auxE != null){
+            Egreso e = auxE.getDato();
+            if (e.getDate().getMonthValue() == mes && e.getDate().getYear() == anio) {
+                totalEgresosMes += e.getTotalAmount();
+            }
+            auxE = auxE.getSiguiente();
+        }
 
         System.out.printf("Total de pedidos en el mes: %d\n", cantidadPedidosMes);
-        System.out.printf("INGRESOS TOTALES DEL MES:   Bs. %.2f\n", totalIngresosMes);
+        System.out.println("-------------------------------------------------");
+        System.out.printf("📈 INGRESOS TOTALES DEL MES: Bs. %.2f\n", totalIngresosMes);
+        System.out.printf("📉 EGRESOS TOTALES DEL MES:  Bs. %.2f\n", totalEgresosMes);
+        System.out.printf("💰 GANANCIA NETA DEL MES:    Bs. %.2f\n", (totalIngresosMes - totalEgresosMes));
         System.out.println("-------------------------------------------------");
         System.out.println("PRODUCTOS MÁS VENDIDOS EN EL MES:");
 
