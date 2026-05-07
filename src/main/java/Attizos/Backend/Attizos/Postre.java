@@ -6,9 +6,9 @@ public class Postre extends Producto
     private String ingredientes;
     private String tipo;
 
-    public Postre(int id, String nombre, double precio, String categoria,
+    public Postre(int id, String nombre, double precio, String categoria,String img,
                   String tamano, String ingredientes, String tipo){
-        super(id, nombre, precio, categoria, 0.0);
+        super(id, nombre, precio, categoria, 0.0,img);
         this.tamano = tamano;
         this.ingredientes = ingredientes;
         this.tipo = tipo;

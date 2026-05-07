@@ -5,9 +5,9 @@ public class Bebida extends Producto
 {
     private TamanoBebida tamano;
     private String tipo;
-    public Bebida(int id, String nombre, double precio, String categoria, int stock,
+    public Bebida(int id, String nombre, double precio, String categoria, int stock,String imagenURL,
                   TamanoBebida tamano, String tipo){
-        super(id, nombre, precio, categoria, stock);
+        super(id, nombre, precio, categoria, stock, imagenURL);
         this.tamano = tamano;
         this.tipo = tipo;
     }

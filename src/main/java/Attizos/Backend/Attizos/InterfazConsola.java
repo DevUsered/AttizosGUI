@@ -1,4 +1,4 @@
-package Attizos.Backend.Attizos;
+/*package Attizos.Backend.Attizos;
 
 import Attizos.Backend.Listas.*;
 
@@ -842,7 +842,7 @@ public class InterfazConsola {
         ListaDE<Producto> lista = restaurante.buscarPorCategoria(cat);
         if (lista.getCabeza() != null) lista.mostrarLista();
         else System.out.println("❌ No hay productos en esa categoría.");
-    }*/
+    }
 
     private static void editarProducto(Restaurante restaurante) {
         System.out.print("\nID del producto a editar: ");
@@ -1172,3 +1172,4 @@ public class InterfazConsola {
         return 0;
     }
 }
+*/

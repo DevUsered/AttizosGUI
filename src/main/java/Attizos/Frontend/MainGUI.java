@@ -10,10 +10,10 @@ public class MainGUI extends Application {
     public void start(Stage ventanaPrincipal) throws Exception {
         Attizos.Backend.Attizos.App.cargarDatosEnRAM();
         Application.setUserAgentStylesheet(new atlantafx.base.theme.PrimerDark().getUserAgentStylesheet());
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Home.fxml"));
         Parent design = loader.load();
 
-        ventanaPrincipal.setTitle("Attizos - Login");
+        ventanaPrincipal.setTitle("Attizos");
         Scene escena = new Scene(design);
         ventanaPrincipal.setScene(escena);
         ventanaPrincipal.setResizable(false);
@@ -23,5 +23,4 @@ public class MainGUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }

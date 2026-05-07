@@ -11,13 +11,21 @@ public  class Producto
     protected String categoria;
     protected double stock;
     protected Receta receta;
-    public Producto(int id, String nombre, double precio, String categoria, double stock){
+
+    protected String imagenURL;
+    public Producto(int id, String nombre, double precio, String categoria, double stock, String imagenURL){
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.categoria = categoria;
         this.stock = stock;
         this.receta = null;
+
+        if(imagenURL == null || imagenURL.isEmpty()){
+            this.imagenURL = "/images/default.png";
+        } else {
+            this.imagenURL = imagenURL;
+        }
     }
     public int getId(){
         return id;
@@ -58,6 +66,27 @@ public  class Producto
         }
         return false;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getImagenURL() {
+        return imagenURL;
+    }
+
+    public void setImagenURL(String imagenURL) {
+        this.imagenURL = imagenURL;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
     public void aumentarStock(int cantidad){
         this.stock += cantidad;
     }

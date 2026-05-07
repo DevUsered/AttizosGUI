@@ -7,9 +7,9 @@ public class Pizza extends Producto
     private String tamano;
     private String descripcionIngredientes;
     private boolean extraQueso;
-    public Pizza(int id, String nombre, double precio, String categoria,
+    public Pizza(int id, String nombre, double precio, String categoria,String img,
                  String tamano, String ingredientes, boolean extraQueso){
-        super(id, nombre, precio, categoria, 0.0);
+        super(id, nombre, precio, categoria, 0.0,img);
         this.tamano = tamano;
         this.descripcionIngredientes = ingredientes;
         this.extraQueso = extraQueso;

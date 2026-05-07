@@ -1,4 +1,4 @@
-package Attizos.Frontend;
+/*package Attizos.Frontend;
 
 import Attizos.Backend.*;
 import Attizos.Backend.Attizos.App;
@@ -124,4 +124,4 @@ public class SalesController {
         cartTable.refresh();
         actualizarTotal();
     }
-}
+}*/
