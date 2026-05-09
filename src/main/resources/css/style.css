@@ -1,7 +1,7 @@
 
 /* Main found*/
 .root{
-    -fx-background-color: linear-gradient(to bottom right, #2e0854, #1a0432);
+    -fx-background-color: linear-gradient(to bottom right, rgba(46, 8, 84, 0.90), rgba(26,4,50,0.70));
 }
 /*Product card*/
 .product-card{
@@ -106,29 +106,26 @@ btn-top:hover{
 
 /*Para dashborad*/
 /*FONDO GENERAL*/
-.root-dashboard {
-    -fx-background-color: transparent;
+.dashboard {
+    -fx-background-color: rgba(68,64,82, 0.5);
     -fx-font-family: "Segoe UI";
 }
 
-/* EL CONTENEDOR PRINCIPAL: Aquí damos el color morado con 75% de opacidad (0.75) */
 .glass-container {
-    -fx-background-color: rgba(43, 10, 85, 0.75);
+    -fx-background-color: rgba(43, 10, 85, 0.50);
     -fx-background-radius: 25;
-    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
     -fx-border-width: 1;
     -fx-border-radius: 25;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 20, 0, 0, 10);
 }
 
 .sidebar {
-    /* Un morado un poco más oscuro para la barra lateral (60% opaco) */
-    -fx-background-color: rgba(25, 4, 54, 0.6);
-    -fx-background-radius: 25 0 0 25; /* Redondea solo el lado izquierdo */
+    -fx-background-color: rgba(25, 4, 54, 0.5);
+    -fx-background-radius: 25 0 0 25;
 }
 
 .content-area {
-    /* Gradiente morado muy suave y transparente para el área central */
     -fx-background-color: linear-gradient(to bottom right, rgba(92, 45, 145, 0.3), rgba(43, 10, 85, 0.4));
     -fx-background-radius: 0 25 25 0; /* Redondea solo el lado derecho */
 }
@@ -204,9 +201,19 @@ btn-top:hover{
 .profile-box {
     -fx-padding: 10;
 }
-
 .profile-avatar {
-    -fx-font-size: 30px;
+    -fx-background-color: white;
+    -fx-background-radius: 50;
+
+    -fx-min-width: 90px;
+    -fx-min-height: 90px;
+
+    -fx-max-width: 90px;
+    -fx-max-height: 90px;
+
+    -fx-alignment: center;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.2, 0, 2);
 }
 
 .profile-name {

@@ -1,57 +1,108 @@
 package Attizos.Frontend;
 
 import Attizos.Backend.Attizos.*;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class DashboardController {
+    @FXML
+    private AnchorPane rootPane;
+    @FXML
+    private VBox sidebar;
+    @FXML
+    private Button btnToggle;
 
-    @FXML private VBox panelAdmin;
-    @FXML private AnchorPane panelCentral;
-    @FXML private Label lblNombreUsuario;
-    @FXML private Label lblRol;
-    @FXML private ImageView imgPerfil; // <- Enlazamos la imagen
+    private boolean menuAbierto = true;
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     @FXML
     public void initialize() {
-        Circle clip = new Circle(22, 22, 22); // Radio de 22
-        imgPerfil.setClip(clip);
-
-        try {
-            Image foto = new Image(getClass().getResourceAsStream("/perfil.png"));
-            imgPerfil.setImage(foto);
-        } catch (Exception e) {
-            System.out.println("No se encontró la foto de perfil, se dejará vacía.");
-        }
-
-        if (App.usuarioLogueado != null) {
-            lblNombreUsuario.setText(App.usuarioLogueado.getNombre());
-            lblRol.setText(App.usuarioLogueado.getCargo().toUpperCase());
-
-            if (!(App.usuarioLogueado instanceof Admin)) {
-                panelAdmin.setVisible(false);
-                panelAdmin.setManaged(false);
-            }
-        }
+        System.out.println("Dashboard ControllerInicialized");
+        configurarVentana();
     }
 
-    @FXML void abrirVentas(ActionEvent event) { System.out.println("Abriendo Ventas..."); }
-    @FXML void abrirPedidos(ActionEvent event) { System.out.println("Abriendo Pedidos..."); }
-    @FXML void abrirReservas(ActionEvent event) { System.out.println("Abriendo Reservas..."); }
-    @FXML void abrirInventario(ActionEvent event) { System.out.println("Abriendo Inventario..."); }
-    @FXML void abrirGestionMenu(ActionEvent event) { System.out.println("Abriendo Menú..."); }
-    @FXML void abrirEmpleados(ActionEvent event) { System.out.println("Abriendo Empleados..."); }
-    @FXML void abrirReportes(ActionEvent event) { System.out.println("Abriendo Reportes..."); }
+    private void configurarVentana() {
+        rootPane.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        rootPane.setOnMouseDragged(event -> {
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
+        });
+    }
 
     @FXML
-    void cerrarSesion(ActionEvent event) {
-        System.out.println("Cerrando sesión...");
-        System.exit(0);
+    void toggleMenu(ActionEvent event) {
+        Timeline timeline = new Timeline();
+
+        // Configuramos los valores finales dependiendo de si abrimos o cerramos
+        double anchoFinal = menuAbierto ? 0 : 260;
+        double opacidadFinal = menuAbierto ? 0 : 1;
+        double rotacionBoton = menuAbierto ? 90 : 0;
+
+        double desplazamientoBoton = menuAbierto ? -5 : 0;
+
+        // Animación de ancho
+        KeyValue kvWidth = new KeyValue(sidebar.prefWidthProperty(), anchoFinal, Interpolator.EASE_BOTH);
+        KeyValue kvMinWidth = new KeyValue(sidebar.minWidthProperty(), anchoFinal, Interpolator.EASE_BOTH);
+
+        // Animación de transparencia (para un efecto suave)
+        KeyValue kvOpacity = new KeyValue(sidebar.opacityProperty(), opacidadFinal, Interpolator.EASE_BOTH);
+
+
+        KeyValue kvRotate = new KeyValue(btnToggle.rotateProperty(), rotacionBoton, Interpolator.EASE_BOTH);
+        KeyValue kvTranslate = new KeyValue(btnToggle.translateXProperty(), desplazamientoBoton, Interpolator.EASE_BOTH);
+
+        KeyFrame frame = new KeyFrame(Duration.millis(300), kvWidth, kvMinWidth, kvOpacity, kvRotate, kvTranslate);
+
+        timeline.getKeyFrames().add(frame);
+        timeline.play();
+        menuAbierto = !menuAbierto;
     }
+    //Buttons
+    @FXML
+    void openSales(ActionEvent event){
+        System.out.println("Abriendo ventana de ventas... (Funcionalidad en proceso)");
+    }
+    @FXML
+    void openOrders(ActionEvent event){
+        System.out.println("Abriendo ventana de pedidos... (Funcionalidad en proceso)");
+    }
+    @FXML
+    void openReservations(ActionEvent event){
+        System.out.println("Abriendo ventana de reservas... (Funcionalidad en proceso)");
+    }
+    @FXML
+    void openProducts(ActionEvent event){
+        System.out.println("Abriendo ventana de productos... (Funcionalidad en proceso)");
+    }
+    @FXML
+    void openInventory(ActionEvent event){
+        System.out.println("Abriendo ventana de inventario... (Funcionalidad en proceso)");
+    }
+    @FXML
+    void openReports(ActionEvent event){
+        System.out.println("Abriendo ventana de reportes... (Funcionalidad en proceso)");
+    }
+    @FXML
+    void openEmploys(ActionEvent event){
+        System.out.println("Abriendo ventana de empleados... (Funcionalidad en proceso)");
+    }
+
 }

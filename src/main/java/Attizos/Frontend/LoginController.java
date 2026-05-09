@@ -42,8 +42,10 @@ public class LoginController {
               Parent root = loader.load();
 
               Stage stage = new Stage();
+              Scene scene = new Scene(root);
+              scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
               stage.setTitle(tituloVentana);
-              stage.setScene(new Scene(root));
+              stage.setScene(scene);
 
               if (App.usuarioLogueado instanceof Cocinero) {
                   stage.setMaximized(true);

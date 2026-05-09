@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1100.0" styleClass="root-dashboard" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="700.0" fx:id="rootPane" prefWidth="1100.0" styleClass="dashboard" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Attizos.Frontend.DashboardController">
     <children>
         <HBox prefHeight="660.0" prefWidth="1060.0" styleClass="glass-container" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
-            <VBox prefWidth="260.0" styleClass="sidebar">
+            <VBox fx:id="sidebar" prefWidth="260.0" styleClass="sidebar">
 
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="25" />
                 </padding>
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label styleClass="logo-icon" text="" />
-                    <Label styleClass="logo-text" text="Music" />
+                    <Label styleClass="logo-icon" text="🍕" />
+                    <Label styleClass="logo-text" text="Attizos" />
                 </HBox>
-                <AnchorPane prefHeight="22.0" prefWidth="220.0" styleClass="search-box">
+                <AnchorPane fx:id="apSearch" prefHeight="21.0" prefWidth="220.0" styleClass="search-box">
                     <VBox.margin>
                         <Insets bottom="10.0" top="20.0" />
                     </VBox.margin>
@@ -34,27 +42,27 @@
 
                     <Button styleClass="menu-button-active" text="🏠  Home" />
 
-                    <Button styleClass="menu-button" text="🧭  Discover" />
+                    <Button fx:id="btnSales" onAction="#openSales" styleClass="menu-button" text="🛒 Venta" />
 
-                    <Button styleClass="menu-button" text="📚  Browse" />
+                    <Button fx:id="btnOrders" onAction="#openOrders" styleClass="menu-button" text="🎫 Pedidos" />
 
-                    <Button styleClass="menu-button" text="🎙  Podcasts" />
-
-                    <Button styleClass="menu-button" text="📻  Radio" />
+                    <Button fx:id="btnReservations" onAction="#openReservations" styleClass="menu-button" text="📓 Reservas" />
 
                 </VBox>
                 <Region VBox.vgrow="ALWAYS" />
                 <Separator styleClass="separator" />
 
-                <Label styleClass="section-title" text="Library" />
+                <Label styleClass="section-title" text="Administración" />
 
                 <VBox spacing="8">
 
-                    <Button styleClass="menu-button" text="📀  Albums" />
+                    <Button fx:id="btnProducts" onAction="#openProducts" styleClass="menu-button" text="🧑‍💻 Productos" />
 
-                    <Button styleClass="menu-button" text="🎵  Songs" />
+                    <Button fx:id="btnInventory" onAction="#openInventory" styleClass="menu-button" text="🏷 Inventario" />
 
-                    <Button styleClass="menu-button" text="👤  Artists" />
+                    <Button fx:id="btnEmploys" onAction="#openEmploys" styleClass="menu-button" text="👥 Empleados" />
+
+                    <Button fx:id="btnReports" onAction="#openReports" styleClass="menu-button" text="📊 Reportes" />
 
                 </VBox>
 
@@ -62,22 +70,26 @@
 
                 <Separator styleClass="separator" />
 
-                <!-- PERFIL -->
                 <HBox alignment="CENTER_LEFT" spacing="12" styleClass="profile-box">
+                    <StackPane styleClass="profile-avatar">
 
-                    <Label styleClass="profile-avatar" text="👨" />
+                        <ImageView fx:id="profileImage" fitHeight="80" fitWidth="80" pickOnBounds="false" preserveRatio="false">
+                            <image>
+                                <Image url="@logo.png" />
+                            </image>
+
+                        </ImageView>
+                    </StackPane>
 
                     <VBox>
-                        <Label styleClass="profile-name" text="Edgar" />
-
-                        <Label styleClass="profile-role" text="Premium member" />
+                        <Label fx:id="lblCargo" styleClass="profile-role" text="Cargo" />
+                        <Label fx:id="lblName" styleClass="profile-name" text="Nombre" />
                     </VBox>
 
                 </HBox>
 
             </VBox>
-            <AnchorPane styleClass="content-area" HBox.hgrow="ALWAYS" />
-
+            <AnchorPane styleClass="dashboard" HBox.hgrow="ALWAYS" />
         </HBox>
 
     </children>
