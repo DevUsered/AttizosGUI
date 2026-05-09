@@ -1,102 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.Font?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="720.0" prefWidth="1080.0" style="-fx-background-color: #0f0d14;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Attizos.Frontend.DashboardController">
+<AnchorPane prefHeight="700.0" prefWidth="1100.0" styleClass="root-dashboard" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox prefHeight="660.0" prefWidth="1060.0" styleClass="glass-container" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
-    <left>
-        <VBox prefWidth="260.0" style="-fx-background-color: #16141f; -fx-border-color: #2b2738; -fx-border-width: 0 1 0 0;">
-            <children>
-                <VBox alignment="CENTER" prefHeight="100.0">
+            <VBox prefWidth="260.0" styleClass="sidebar">
+
+                <padding>
+                    <Insets bottom="20" left="20" right="20" top="25" />
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label styleClass="logo-icon" text="" />
+                    <Label styleClass="logo-text" text="Music" />
+                </HBox>
+                <AnchorPane prefHeight="22.0" prefWidth="220.0" styleClass="search-box">
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="20.0" />
+                    </VBox.margin>
                     <children>
-                        <Label text="ATTIZOS" textFill="#a855f7">
-                            <font><Font name="System Bold" size="28.0" /></font>
-                        </Label>
-                        <Label text="PUNTO DE VENTA" textFill="#7a7a7a" style="-fx-font-size: 10px; -fx-letter-spacing: 2;" />
+                        <Label layoutX="15" layoutY="12" styleClass="search-icon" text="🔍" />
+
+                        <Label layoutX="45" layoutY="12" styleClass="search-text" text="Search..." />
                     </children>
+                </AnchorPane>
+                <Label styleClass="section-title" text="Menu" />
+
+                <VBox spacing="8">
+
+                    <Button styleClass="menu-button-active" text="🏠  Home" />
+
+                    <Button styleClass="menu-button" text="🧭  Discover" />
+
+                    <Button styleClass="menu-button" text="📚  Browse" />
+
+                    <Button styleClass="menu-button" text="🎙  Podcasts" />
+
+                    <Button styleClass="menu-button" text="📻  Radio" />
+
                 </VBox>
+                <Region VBox.vgrow="ALWAYS" />
+                <Separator styleClass="separator" />
 
-                <Separator opacity="0.1" />
+                <Label styleClass="section-title" text="Library" />
 
-                <VBox spacing="5.0">
-                    <padding><Insets bottom="10.0" left="15.0" right="15.0" top="20.0" /></padding>
-                    <children>
-                        <Label text="OPERACIONES" textFill="#4d4a5d" style="-fx-font-weight: bold; -fx-font-size: 11;">
-                            <VBox.margin><Insets bottom="5.0" left="5.0" /></VBox.margin>
-                        </Label>
-                        <Button onAction="#abrirVentas" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 10; -fx-font-size: 14px; -fx-cursor: hand;" text="🛒  Nueva Venta" />
-                        <Button onAction="#abrirPedidos" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 10; -fx-font-size: 14px; -fx-cursor: hand;" text="🍳  Pedidos Cocina" />
-                        <Button onAction="#abrirReservas" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 10; -fx-font-size: 14px; -fx-cursor: hand;" text="📅  Reservas" />
-                    </children>
-                </VBox>
+                <VBox spacing="8">
 
-                <VBox fx:id="panelAdmin" spacing="5.0">
-                    <padding><Insets bottom="10.0" left="15.0" right="15.0" top="10.0" /></padding>
-                    <children>
-                        <Label text="ADMINISTRACIÓN" textFill="#4d4a5d" style="-fx-font-weight: bold; -fx-font-size: 11;">
-                            <VBox.margin><Insets bottom="5.0" left="5.0" /></VBox.margin>
-                        </Label>
-                        <Button onAction="#abrirInventario" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0a0a0; -fx-alignment: CENTER_LEFT; -fx-padding: 10; -fx-font-size: 14px; -fx-cursor: hand;" text="📦  Almacén e Insumos" />
-                        <Button onAction="#abrirGestionMenu" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0a0a0; -fx-alignment: CENTER_LEFT; -fx-padding: 10; -fx-font-size: 14px; -fx-cursor: hand;" text="🍕  Gestión de Menú" />
-                        <Button onAction="#abrirEmpleados" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0a0a0; -fx-alignment: CENTER_LEFT; -fx-padding: 10; -fx-font-size: 14px; -fx-cursor: hand;" text="👥  Empleados" />
-                        <Button onAction="#abrirReportes" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: #a0a0a0; -fx-alignment: CENTER_LEFT; -fx-padding: 10; -fx-font-size: 14px; -fx-cursor: hand;" text="📊  Reportes" />
-                    </children>
+                    <Button styleClass="menu-button" text="📀  Albums" />
+
+                    <Button styleClass="menu-button" text="🎵  Songs" />
+
+                    <Button styleClass="menu-button" text="👤  Artists" />
+
                 </VBox>
 
                 <Region VBox.vgrow="ALWAYS" />
 
-                <VBox spacing="15.0" style="-fx-background-color: #1c1a24; -fx-padding: 20;">
-                    <children>
-                        <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <children>
-                                <StackPane>
-                                    <Circle radius="22" fill="#2b2738" stroke="#8b5cf6" strokeWidth="2" />
-                                    <ImageView fx:id="imgPerfil" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" />
-                                </StackPane>
-                                <VBox alignment="CENTER_LEFT">
-                                    <children>
-                                        <Label fx:id="lblNombreUsuario" text="Usuario" textFill="WHITE" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
-                                        <Label fx:id="lblRol" text="Rol" textFill="#a855f7" style="-fx-font-size: 11px;" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-                        <Button onAction="#cerrarSesion" maxWidth="Infinity" style="-fx-background-color: #ff4c4c22; -fx-text-fill: #ff4c4c; -fx-font-weight: bold; -fx-padding: 10; -fx-background-radius: 8; -fx-cursor: hand;" text="🚪 Cerrar Sesión" />
-                    </children>
-                </VBox>
-            </children>
-        </VBox>
-    </left>
+                <Separator styleClass="separator" />
 
-    <center>
-        <AnchorPane fx:id="panelCentral" style="-fx-background-color: #16141f; -fx-background-radius: 20; -fx-border-color: #2b2738; -fx-border-radius: 20;" BorderPane.alignment="CENTER">
-            <BorderPane.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </BorderPane.margin>
-            <children>
-                <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <children>
-                        <Label text="¡Bienvenido al Sistema Attizos!" textFill="WHITE">
-                            <font><Font name="System Bold" size="28.0" /></font>
-                        </Label>
-                        <Label text="Seleccione un módulo del panel izquierdo" textFill="#7a7a7a">
-                            <font><Font size="16.0" /></font>
-                        </Label>
-                    </children>
-                </VBox>
-            </children>
-        </AnchorPane>
-    </center>
-</BorderPane>
+                <!-- PERFIL -->
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="profile-box">
+
+                    <Label styleClass="profile-avatar" text="👨" />
+
+                    <VBox>
+                        <Label styleClass="profile-name" text="Edgar" />
+
+                        <Label styleClass="profile-role" text="Premium member" />
+                    </VBox>
+
+                </HBox>
+
+            </VBox>
+            <AnchorPane styleClass="content-area" HBox.hgrow="ALWAYS" />
+
+        </HBox>
+
+    </children>
+   <stylesheets>
+      <URL value="@css/style.css" />
+      <URL value="@css/style.css" />
+   </stylesheets>
+
+</AnchorPane>

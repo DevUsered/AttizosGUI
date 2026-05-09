@@ -67,12 +67,12 @@ public class HomeController {
         Label name = new Label(p.getNombre());
         name.getStyleClass().add("product-name");
 
-        Label price = new Label(String.format("$%.2f", p.getPrecio()));
+        Label price = new Label(String.format("Bs.%.2f", p.getPrecio()));
         price.getStyleClass().add("product-price");
 
         ImageView imagen = new ImageView();
         try{
-            String rutaImg = "/images/"+p.getImagenURL();
+            String rutaImg = "/images/Productos/"+p.getImagenURL();
             imagen.setImage(new Image(getClass().getResourceAsStream(rutaImg)));
             imagen.setFitHeight(120);
             imagen.setPreserveRatio(true);

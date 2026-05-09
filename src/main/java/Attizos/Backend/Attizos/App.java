@@ -30,7 +30,6 @@ public class App {
         LocalDate fechaVencida = LocalDate.now().minusDays(5);
         LocalDate fechaLejana = LocalDate.now().plusYears(1);
 
-        // Masas y Bases
         almacen.agregarInsumo(new Insumo("I001", "Harina de trigo 000", "Masas", "kg", 50.0, 10.0, 100.0, fechaBuena));
         almacen.agregarInsumo(new Insumo("I002", "Levadura Fresca", "Masas", "gr", 500.0, 100.0, 1000.0, fechaCasiVencida));
         almacen.agregarInsumo(new Insumo("I003", "Aceite de Oliva", "Líquidos", "lt", 15.0, 3.0, 30.0, fechaLejana));
@@ -51,7 +50,6 @@ public class App {
         almacen.agregarInsumo(new Insumo("I026", "Piña en Almíbar", "Aderezos", "lt", 8.0, 2.0, 20.0, fechaLejana));
         almacen.agregarInsumo(new Insumo("I027", "Champiñones Frescos", "Vegetales", "kg", 4.0, 1.0, 10.0, fechaCasiVencida));
 
-        // 4. CREACIÓN DE RECETAS
         Receta rPepperoni = new Receta();
         rPepperoni.agregarIngrediente("I001", 0.30);
         rPepperoni.agregarIngrediente("I012", 0.25);
@@ -91,31 +89,47 @@ public class App {
         rCalzone.agregarIngrediente("I019", 0.15);
 
 
-        // 5. REGISTRO DE PRODUCTOS AL MENÚ CON IMÁGENES
-
         // PIZZAS
-        Pizza pPepp = new Pizza(101, "Pizza Pepperoni", 60.0, "Pizzas", "resources/images/pizza.png", "Pequeño", "Queso, salsa, pepperoni", false);
+        Pizza pPepp = new Pizza(101, "Pizza Pepperoni", 60.0, "Pizzas", "pizza_peperoni.png", "Pequeño", "Queso, salsa, pepperoni", false);
         pPepp.setReceta(rPepperoni);
-        pPepp.setImagenURL("pizza.png"); // <-- Conectado a tu interfaz
         attizos.agregarProducto(pPepp);
 
-        Pizza pHawaiana = new Pizza(102, "Pizza Hawaiana", 55.0, "Pizzas", "resources/images/pizza.png", "Grande", "Queso, salsa, hawaiana", false);
+        Pizza pHawaiana = new Pizza(102, "Pizza Hawaiana", 55.0, "Pizzas", "pizza.png", "Grande", "Queso, salsa, hawaiana", false);
         pHawaiana.setReceta(rHawaiana);
-        pHawaiana.setImagenURL("pizza.png");
         attizos.agregarProducto(pHawaiana);
 
-        // PASTAS
-        Calzone calzoneClas = new Calzone(301, "Calzone Italiano", 35.0, "Calzones","resources/images/Lazana.png" ,"Masa crujiente, queso fundido, jamón, salsa base");
-        calzoneClas.setReceta(rCalzone);// Si tienes una de calzone, cambias el nombre aquí
-        calzoneClas.setImagenURL("Lazana.png"); // <-- Conectado a tu interfaz
+        Pizza pCarnivora = new Pizza(103, "Pizza Carnívora", 70.0, "Pizzas", "pizza_carnivora.png", "Mediana", "Queso, salsa, carnivora", false);
+        pCarnivora.setReceta(rCarnivora);
+        pCarnivora.setImagenURL("pizza_carnivora.png");
+        attizos.agregarProducto(pCarnivora);
+
+        Pasta pastaBol = new Pasta(201, "Pasta Boloñesa", 50.0, "Pastas", "pasta_bolonesa.png", "Pasta fresca casera, carne molida","Roja(Tomate)" );
+        pastaBol.setReceta(rPastaBol);
+        attizos.agregarProducto(pastaBol);
+
+        Pasta pastaAlf = new Pasta(202, "Pasta Alfredo", 50.0, "Pastas", "fettuccine_alf.png", "Pasta fresca casera, champiñones frescos","Blanca(Crema)" );
+        pastaAlf.setReceta(rPastaAlf);
+        attizos.agregarProducto(pastaAlf);
+
+
+        Calzone calzoneClas = new Calzone(301, "Calzone Italiano", 35.0, "Calzones","calzone_ita.png" ,"Masa crujiente, queso fundido, jamón, salsa base");
+        calzoneClas.setReceta(rCalzone);
         attizos.agregarProducto(calzoneClas);
 
-        // BEBIDAS (Sin receta, stock directo)
-        // Guardamos la bebida en una variable antes de agregarla para ponerle la foto
-        Bebida b1 = new Bebida(401, "Coca Cola 2L", 15.0, "Bebidas", 24, "resources/images/coca_cola_2L.png",TamanoBebida.DOS_LITROS, "Gaseosa");
+        Bebida b1 = new Bebida(401, "Coca Cola 2L", 15.0, "Bebidas", 24, "coca_2L.png",TamanoBebida.DOS_LITROS, "Gaseosa");
         attizos.agregarProducto(b1);
-        b1.setImagenURL("coca_cola_2L.png");
 
+        Bebida b2 = new Bebida(402, "Coca Cola Personal", 3, "Bebidas", 24, "coca_personal.png",TamanoBebida.PERSONAL, "Gaseosa");
+        attizos.agregarProducto(b2);
+
+        Bebida b3 = new Bebida(403, "Sprite 2L", 12, "Bebidas", 24, "sprite_2L.png",TamanoBebida.MEDIO_LITRO, "Agua");
+        attizos.agregarProducto(b3);
+
+        Bebida b4 = new Bebida(404, "Agua Mineral", 5, "Bebidas", 24, "agua_min.png",TamanoBebida.PERSONAL, "Agua");
+        attizos.agregarProducto(b4);
+
+        Bebida b5 = new Bebida(405, "Cerveza Taquiña", 8, "Bebidas", 24, "cerveza_taqu.png",TamanoBebida.MEDIO_LITRO, "Alcohólica");
+        attizos.agregarProducto(b5);
         System.out.println("✅ Datos cargados exitosamente.");
     }
 
