@@ -12,11 +12,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 public class LoginController {
-    @FXML private ImageView logoEmpresa;
     @FXML private TextField txtUsuario;
     @FXML private PasswordField txtPassword;
     @FXML private Button btnLogin;
@@ -25,43 +26,45 @@ public class LoginController {
     void enfocarPassword(ActionEvent event) {
         txtPassword.requestFocus();
     }
+
     @FXML
-    void iniciarSesion(ActionEvent event) {
-        String username = txtUsuario.getText();
-        String password = txtPassword.getText();
+    void iniciarSesion(ActionEvent event){
+        String user = txtUsuario.getText().trim();
+        String pass = txtPassword.getText().trim();
 
-      if(App.validarAcceso(username, password)){
-          try{
-              String vistaDestino = "/Dashboard.fxml";
-              String tituloVentana = "AttizosPOS - Panel de Control";
-              if(App.usuarioLogueado instanceof Cocinero){
-                  vistaDestino = "/Cocina.fxml";
-                  tituloVentana = "AttizosPOS - Monitor de Cocina";
-              }
-              FXMLLoader loader = new FXMLLoader(getClass().getResource(vistaDestino));
-              Parent root = loader.load();
-
-              Stage stage = new Stage();
-              Scene scene = new Scene(root);
-              scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
-              stage.setTitle(tituloVentana);
-              stage.setScene(scene);
-
-              if (App.usuarioLogueado instanceof Cocinero) {
-                  stage.setMaximized(true);
-              }
-              stage.show();
-              Stage loginStage = (Stage) btnLogin.getScene().getWindow();
-              loginStage.close();
-          }catch (IOException e){
-              e.printStackTrace();
-              lblMensaje.setText("❌ Error al cargar la interfaz");
-          }
-      }else{
-          lblMensaje.setStyle("-fx-text-fill: #ff4c4c;");
-          lblMensaje.setText("❌ Usuario o contraseña incorrectos");
-          txtPassword.clear();
-          txtUsuario.requestFocus();
-      }
+        if(user.isEmpty() || pass.isEmpty()){
+            lblMensaje.setText("Por favor, ingrese usuario y contraseña");
+            return;
+        }
+        boolean accesoConcedido = App.validarAcceso(user, pass);
+        if(accesoConcedido){
+            lblMensaje.setText("-fx-text-fill: #00ff88;");
+            lblMensaje.setText("!Acceso concedido! Cargando...");
+            abrirDashboard();
+        }else{
+            lblMensaje.setText("-fx-text-fill: #ff4c4c;");
+            lblMensaje.setText("Usuario o contraseña incorrectos");
+        }
     }
+    private void abrirDashboard(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+
+            Scene scene = new Scene(root);
+            scene.setFill(Color.TRANSPARENT);
+            stage.setScene(scene);
+            stage.show();
+
+            Stage stageAc = (Stage) btnLogin.getScene().getWindow();
+            stageAc.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+            lblMensaje.setText("Error al cargar el sistema. ");
+        }
+    }
+
 }

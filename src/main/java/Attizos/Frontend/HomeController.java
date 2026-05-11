@@ -13,9 +13,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import Attizos.Backend.Attizos.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -85,11 +86,12 @@ public class HomeController {
     @FXML
     void login(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setTitle("Iniciar sesión");
+            scene.setFill(Color.TRANSPARENT);
+            stage.initStyle(StageStyle.TRANSPARENT);
             stage.show();
 
             Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
