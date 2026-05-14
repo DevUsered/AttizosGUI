@@ -35,7 +35,7 @@ public class App {
         almacen.agregarInsumo(new Insumo("I003", "Aceite de Oliva", "Líquidos", "lt", 15.0, 3.0, 30.0, fechaLejana));
 
         // Lácteos y Salsas
-        almacen.agregarInsumo(new Insumo("I006", "Salsa de tomate", "Salsas", "lt", 12.0, 5.0, 25.0, fechaVencida)); // Para mostrar la alerta roja
+        almacen.agregarInsumo(new Insumo("I006", "Salsa de tomate", "Salsas", "lt", 12.0, 5.0, 25.0, fechaBuena)); // Para mostrar la alerta roja
         almacen.agregarInsumo(new Insumo("I012", "Queso Mozzarella", "Lácteos", "kg", 20.0, 5.0, 40.0, fechaCasiVencida)); // Alerta amarilla
         almacen.agregarInsumo(new Insumo("I013", "Crema de Leche", "Lácteos", "lt", 10.0, 2.0, 20.0, fechaBuena));
 

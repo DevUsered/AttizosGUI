@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 import java.util.HashSet;
@@ -34,9 +35,8 @@ public class VentasController {
     }
 
     private void iniciarNuevaVenta() {
-        int numFactura = App.attizos.generarNumeroFactura();
         tfNombreCli.clear();
-        facturaActual = new Factura(numFactura, "");
+        facturaActual = new Factura(0, "");
         productoSeleccionadoEnCarrito = null;
         filaSeleccionada = null;
 
@@ -75,48 +75,41 @@ public class VentasController {
     private void mostrarProductosPorCategoria(String categoria) {
         flPProductos.getChildren().clear();
         NodoDE<Producto> actual = App.attizos.getMenu().getCabeza();
-
         while (actual != null) {
             Producto p = actual.getDato();
             if (categoria.equals("Todos") || p.getCategoria().equalsIgnoreCase(categoria)) {
-
-                VBox card = new VBox(8);
-                card.getStyleClass().add("sale-product-card");
-                card.setAlignment(Pos.CENTER);
-
-                Label name = new Label(p.getNombre());
-                name.getStyleClass().add("product-name");
-                name.setWrapText(true);
-                name.setTextAlignment(TextAlignment.CENTER);
-
-                Label price = new Label("Bs. " + String.format("%.2f", p.getPrecio()));
-                price.getStyleClass().add("product-price");
-
-                int stock = p.calcularDisponibilidad(App.attizos.getInventario());
-                Label lblStock = new Label("Stock: " + stock);
-                lblStock.setStyle("-fx-text-fill: " + (stock > 0 ? "#b39ddb;" : "#ff4c4c;"));
-
-                card.getChildren().addAll(name, price, lblStock);
-
-                // Al hacer clic, se agrega 1 al carrito
-                card.setOnMouseClicked(e -> agregarAlCarrito(p));
-
-                flPProductos.getChildren().add(card);
+                crearTarjetaProducto(p);
             }
             actual = actual.getSiguiente();
         }
     }
     private void agregarAlCarrito(Producto p) {
-        boolean agregado = facturaActual.agregarProducto(p, 1, App.attizos.getInventario());
-        if (agregado) {
-            actualizarVistaCarrito();
-            mostrarProductosPorCategoria(categoriaActiva);
-        } else {
-            System.out.println("❌ No hay stock suficiente para: " + p.getNombre());
+        int disponible = p.calcularDisponibilidad(App.attizos.getInventario());
+        if(disponible <= 0){
+            mostrarAlerta("Sin Stock", p.getNombre() + "esta agotado o falta insumos. ",Alert.AlertType.WARNING);
+            return;
         }
+        NodoDE<DetalleFactura> ac = facturaActual.getDetalles().getCabeza();
+        boolean existe = false;
+        while (ac != null) {
+            if(ac.getDato().getProducto().getId() == p.getId()){
+                int nuevaCant = ac.getDato().getCantidad() + 1;
+                facturaActual.modificarCantidad(p, nuevaCant, App.attizos.getInventario());
+                existe = true;
+                break;
+            }
+            ac = ac.getSiguiente();
+        }
+        if (!existe) {
+            boolean agregado = facturaActual.agregarProducto(p, 1, App.attizos.getInventario());
+            if (!agregado) {
+                mostrarAlerta("Error de Stock", "No hay ingredientes suficientes para: " + p.getNombre(), Alert.AlertType.ERROR);
+            }
+        }
+        actualizarVistaCarrito();
+        mostrarProductosPorCategoria(categoriaActiva);
     }
     private void seleccionarItemCarrito(HBox row, Producto p) {
-        // Quitamos el color de selección anterior
         if (filaSeleccionada != null) {
             filaSeleccionada.setStyle("-fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 10;");
         }
@@ -128,7 +121,10 @@ public class VentasController {
 
     @FXML
     void reducirProducto() {
-        if (productoSeleccionadoEnCarrito != null) {
+        if (productoSeleccionadoEnCarrito == null) {
+            mostrarAlerta("Atención", "Seleccione un producto del carrito para reducir su cantidad.", Alert.AlertType.WARNING);
+            return;
+        }
             NodoDE<DetalleFactura> actual = facturaActual.getDetalles().getCabeza();
             while (actual != null) {
                 if (actual.getDato().getProducto().getId() == productoSeleccionadoEnCarrito.getId()) {
@@ -144,64 +140,127 @@ public class VentasController {
             }
             actualizarVistaCarrito();
             mostrarProductosPorCategoria(categoriaActiva);
-        }
     }
 
     @FXML
     void quitarProducto() {
-        if (productoSeleccionadoEnCarrito != null) {
+        if (productoSeleccionadoEnCarrito == null) {
+            mostrarAlerta("Atención", "Seleccione un producto del carrito para eliminarlo.", Alert.AlertType.WARNING);
+            return;
+        }
             facturaActual.eliminarProducto(productoSeleccionadoEnCarrito, App.attizos.getInventario());
             actualizarVistaCarrito();
             mostrarProductosPorCategoria(categoriaActiva);
-        }
     }
     @FXML
     void finalizarVenta() {
-        if (facturaActual.getTotal() > 0) {
-            String nombreCli = tfNombreCli.getText().trim();
-            if (nombreCli.isEmpty()) nombreCli = "Sin Nombre";
-            facturaActual.imprimirFactura();
+        String nombreCli = tfNombreCli.getText().trim();
+        if (nombreCli.isEmpty()) nombreCli = "Sin Nombre";
 
-            ListaDE<DetalleFactura> productosParaCocina = new ListaDE<>();
-            NodoDE<DetalleFactura> actual = facturaActual.getDetalles().getCabeza();
-            boolean requiereCocina = false;
-
-            while (actual != null){
-                if(actual.getDato().getProducto().tieneReceta()){
-                    productosParaCocina.insertarAlFinal(actual.getDato());
-                    requiereCocina = true;
-                }
-                actual = actual.getSiguiente();
-            }
-            if(requiereCocina){
-                Pedido nuevoPedido = new Pedido(facturaActual.getNumeroFactura(), nombreCli, productosParaCocina, facturaActual.getTotal());
-                App.attizos.agregarPedido(nuevoPedido);
-                System.out.println("🔔 ¡DING! Pedido enviado a la cocina con éxito.");
-            }
-
-            App.attizos.registrarVentaFinalizada(facturaActual);
-            System.out.println("✅ Venta registrada correctamente.");
-
-            iniciarNuevaVenta();
-        } else {
-            System.out.println("⚠️ El carrito está vacío. Agregue productos antes de confirmar.");
+        if(facturaActual.getTotal() <= 0){
+            mostrarAlerta("Carrito Vacío", "⚠ Agregue productos antes de cobrar.", Alert.AlertType.WARNING);
+            return;
         }
+        int nroFactura = App.attizos.generarNumeroFactura();
+        facturaActual.setNumeroFactura(nroFactura);
+        facturaActual.setNombreCliente(nombreCli);
+
+        ListaDE<DetalleFactura> productosParaCocina = new ListaDE<>();
+        NodoDE<DetalleFactura> actual = facturaActual.getDetalles().getCabeza();
+        boolean requiereCocina = false;
+
+        while (actual != null){
+            if(actual.getDato().getProducto().tieneReceta()){
+                productosParaCocina.insertarAlFinal(actual.getDato());
+                requiereCocina = true;
+            }
+            actual = actual.getSiguiente();
+        }
+
+        if(requiereCocina){
+            Pedido nuevoPedido = new Pedido(facturaActual.getNumeroFactura(), nombreCli, productosParaCocina, facturaActual.getTotal());
+            App.attizos.agregarPedido(nuevoPedido);
+        }
+
+        App.attizos.registrarVentaFinalizada(facturaActual);
+
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/Ticket.fxml"));
+            javafx.scene.Parent nodoTicket = loader.load();
+
+            TicketController controller = loader.getController();
+            String nombreCajero = (App.usuarioLogueado != null) ? App.usuarioLogueado.getUsername() : "Caja Principal";
+
+            controller.inicializarTicket(facturaActual, nombreCajero, facturaActual.getNumeroFactura());
+            imprimirEnImpresoraTermica(nodoTicket);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "La venta se registró pero no se pudo mandar al ticket.", Alert.AlertType.ERROR);
+        }
+        iniciarNuevaVenta();
+    }
+
+    private void imprimirEnImpresoraTermica(javafx.scene.Node nodoTicket){
+        javafx.print.PrinterJob printerJob = javafx.print.PrinterJob.createPrinterJob();
+        if (printerJob != null){
+            try{
+                // ========================================================
+                // OPCIÓN 1: MOSTRAR PANTALLA DE IMPRESIÓN DE WINDOWS
+                // ========================================================
+               boolean procede = printerJob.showPrintDialog(null);
+                if(procede){
+                    boolean impreso = printerJob.printPage(nodoTicket);
+                    if (impreso) {
+                        printerJob.endJob();
+                        System.out.println("✅ Ticket enviado a la impresora exitosamente.");
+                    }
+                }
+
+               /* boolean impreso = printerJob.printPage(nodoTicket);
+                if (impreso) {
+                    printerJob.endJob();
+                }*/
+                // ========================================================
+
+
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            mostrarAlerta("Error de Impresora", "No se detectó ninguna impresora instalada en el sistema.", Alert.AlertType.ERROR);
+        }
+    }
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
     private void crearTarjetaProducto(Producto p) {
         VBox card = new VBox(8);
         card.getStyleClass().add("sale-product-card");
         card.setAlignment(Pos.CENTER);
         ImageView imgView = new ImageView();
-        try {
-            Image img = new Image(getClass().getResourceAsStream(p.getImagenURL()));
-            imgView.setImage(img);
-        } catch (Exception e) {
-            imgView.setImage(new Image(getClass().getResourceAsStream("/Attizos/Frontend/images/default.png")));
-        }
         imgView.setFitHeight(80);
         imgView.setFitWidth(80);
         imgView.setPreserveRatio(true);
         imgView.getStyleClass().add("product-image-view");
+        try {
+           String url = p.getImagenURL();
+           String rutaF = url.startsWith("/") ? url : "/images/Productos/"+url;
+           java.io.InputStream streamImg = getClass().getResourceAsStream(rutaF);
+           if(streamImg != null){
+               imgView.setImage(new Image(streamImg));
+           }else{
+               java.io.InputStream streamDefault = getClass().getResourceAsStream("/images/default.png");
+               if (streamDefault != null) {
+                   imgView.setImage(new Image(streamDefault));
+               }
+           }
+        } catch (Exception e) {
+        }
 
         Label name = new Label(p.getNombre());
         name.getStyleClass().add("product-name");
@@ -215,7 +274,6 @@ public class VentasController {
         Label lblStock = new Label("Stock: " + stock);
         lblStock.setStyle("-fx-text-fill: " + (stock > 0 ? "#b39ddb;" : "#ff4c4c;"));
 
-        // Añadimos la imagen al inicio de la tarjeta
         card.getChildren().addAll(imgView, name, price, lblStock);
 
         card.setOnMouseClicked(e -> agregarAlCarrito(p));
@@ -224,50 +282,68 @@ public class VentasController {
     private void actualizarVistaCarrito() {
         vBoxCarrito.getChildren().clear();
 
-        // Gracias a tu clase Factura.java, aquí los productos ya vienen sumados
+        double imgSize = 45.0;
+
         NodoDE<DetalleFactura> actual = facturaActual.getDetalles().getCabeza();
 
         while (actual != null) {
             DetalleFactura det = actual.getDato();
             Producto p = det.getProducto();
 
-            HBox itemRow = new HBox(10);
+            HBox itemRow = new HBox(12);
             itemRow.getStyleClass().add("cart-item");
-            itemRow.setAlignment(Pos.CENTER_LEFT);
-
-            // --- IMAGEN MINIATURA PARA EL CARRITO ---
-            ImageView imgCart = new ImageView();
-            try {
-                imgCart.setImage(new Image(getClass().getResourceAsStream(p.getImagenURL())));
-            } catch (Exception e) {
-                imgCart.setImage(new Image(getClass().getResourceAsStream("/Attizos/Frontend/images/default.png")));
+            if (p == productoSeleccionadoEnCarrito) {
+                itemRow.getStyleClass().add("cart-item-selected");
             }
-            imgCart.setFitHeight(40);
-            imgCart.setFitWidth(40);
-            imgCart.setPreserveRatio(true);
 
-            // Información del producto y cantidad
-            VBox infoCol = new VBox(2);
+            ImageView imgView = new ImageView();
+            try {
+                String archivoImagen = p.getImagenURL();
+                String rutaFinal = archivoImagen.startsWith("/") ? archivoImagen : "/images/Productos/" + archivoImagen;
+                java.io.InputStream streamImg = getClass().getResourceAsStream(rutaFinal);
+
+                if (streamImg != null) {
+                    imgView.setImage(new Image(streamImg));
+                } else {
+                    imgView.setImage(new Image(getClass().getResourceAsStream("/images/Productos/default.png")));
+                }
+            } catch (Exception e) {}
+
+            imgView.setFitHeight(imgSize);
+            imgView.setFitWidth(imgSize);
+            imgView.setPreserveRatio(false);
+
+            javafx.scene.shape.Rectangle clip = new javafx.scene.shape.Rectangle(imgSize, imgSize);
+            clip.setArcWidth(10);
+            clip.setArcHeight(10);
+            imgView.setClip(clip);
+
+            VBox textos = new VBox(2);
+            textos.setAlignment(Pos.CENTER_LEFT);
             Label name = new Label(p.getNombre());
-            name.getStyleClass().add("cart-item-text");
-            name.setStyle("-fx-font-weight: bold;");
+            name.getStyleClass().add("cart-product-name");
+            name.setMaxWidth(110);
+            name.setWrapText(true);
 
-            Label qty = new Label("Cantidad: " + det.getCantidad());
-            qty.setStyle("-fx-text-fill: #9d8bc9; -fx-font-size: 11px;");
+            Label qty = new Label("x" + det.getCantidad());
+            qty.getStyleClass().add("cart-product-qty");
 
-            infoCol.getChildren().addAll(name, qty);
+            textos.getChildren().addAll(name, qty);
+
 
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
-            // Subtotal calculado (Precio * Cantidad)
-            Label sub = new Label("Bs." + String.format("%.2f", det.getSubtotal()));
-            sub.getStyleClass().add("cart-item-subtotal");
+            Label price = new Label("Bs. " + String.format("%.2f", det.getSubtotal()));
+            price.getStyleClass().add("cart-product-price");
 
-            itemRow.getChildren().addAll(imgCart, infoCol, spacer, sub);
+            itemRow.getChildren().addAll(imgView, textos, spacer, price);
 
-            // Selección para botones reducir/quitar
-            itemRow.setOnMouseClicked(e -> seleccionarItemCarrito(itemRow, p));
+
+            itemRow.setOnMouseClicked(e -> {
+                productoSeleccionadoEnCarrito = p;
+                actualizarVistaCarrito();
+            });
 
             vBoxCarrito.getChildren().add(itemRow);
             actual = actual.getSiguiente();

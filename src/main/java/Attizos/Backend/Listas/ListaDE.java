@@ -62,7 +62,7 @@ public class ListaDE <T>{
             longitud++; // Solo incrementamos si se insertó en el else
         }
     }
-    //Eliminar elementos
+
     public T eliminarElInicio() {
         if (esVacia()) {
             System.out.println("La lista está vacía");
@@ -138,7 +138,7 @@ public class ListaDE <T>{
                     cola.setSiguiente(null);
                     longitud--;
                 } else {
-                    // Lógica para borrar un nodo en el medio
+
                     ac.getAnterior().setSiguiente(ac.getSiguiente());
                     ac.getSiguiente().setAnterior(ac.getAnterior());
                     longitud--;

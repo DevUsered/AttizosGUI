@@ -207,8 +207,6 @@ public class Restaurante
             if (i.getCodigo().equals(codBase) || i.getCodigo().startsWith(codBase + "-L")) {
 
                 if (!i.isVencido()) {
-                    // Si encontramos uno, lo elegimos. Si hay varios válidos,
-                    // elegimos el más próximo a vencer (porque de ahí se descontó originalmente)
                     if (insumoDestino == null) {
                         insumoDestino = i;
                     } else if (i.getFechaVencimiento() != null && insumoDestino.getFechaVencimiento() != null) {

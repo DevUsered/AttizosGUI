@@ -40,7 +40,11 @@ public class LoginController {
         if(accesoConcedido){
             lblMensaje.setText("-fx-text-fill: #00ff88;");
             lblMensaje.setText("!Acceso concedido! Cargando...");
-            abrirDashboard();
+            if(App.usuarioLogueado instanceof Cocinero){
+                abrirCocina();
+            }else {
+                abrirDashboard();
+            }
         }else{
             lblMensaje.setText("-fx-text-fill: #ff4c4c;");
             lblMensaje.setText("Usuario o contraseña incorrectos");
@@ -62,6 +66,22 @@ public class LoginController {
             Stage stageAc = (Stage) btnLogin.getScene().getWindow();
             stageAc.close();
         }catch (IOException e) {
+            e.printStackTrace();
+            lblMensaje.setText("Error al cargar el sistema. ");
+        }
+    }
+    private void abrirCocina(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Cocina.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+            Stage stageAc = (Stage) btnLogin.getScene().getWindow();
+            stageAc.close();
+        }catch (IOException e){
             e.printStackTrace();
             lblMensaje.setText("Error al cargar el sistema. ");
         }

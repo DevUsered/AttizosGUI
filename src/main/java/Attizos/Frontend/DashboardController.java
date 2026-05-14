@@ -45,6 +45,7 @@ public class DashboardController {
     @FXML
     public void initialize() {
         configurarVentana();
+        cargarPVentas();
         if(App.usuarioLogueado !=null){
             lblName.setText(App.usuarioLogueado.getNombre());
             lblCargo.setText(App.usuarioLogueado.getCargo());
@@ -130,9 +131,11 @@ public class DashboardController {
     }
     @FXML
     void openSales(ActionEvent event){
+        cargarPVentas();
+    }
+    private void cargarPVentas(){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Sales.fxml"));
-            loader.setController(new VentasController());
 
             Parent view = loader.load();
             contentArea.getChildren().setAll(view);
@@ -142,11 +145,23 @@ public class DashboardController {
     }
     @FXML
     void openOrders(ActionEvent event){
-        System.out.println("Abriendo ventana de pedidos... (Funcionalidad en proceso)");
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Cocina.fxml"));
+            Parent view = loader.load();
+            contentArea.getChildren().setAll(view);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     @FXML
     void openReservations(ActionEvent event){
-        System.out.println("Abriendo ventana de reservas... (Funcionalidad en proceso)");
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Reservas.fxml"));
+            Parent view = loader.load();
+            contentArea.getChildren().setAll(view);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     @FXML
     void openProducts(ActionEvent event){
@@ -183,7 +198,7 @@ public class DashboardController {
             Stage vAc = (Stage) ((Node) event.getSource()).getScene().getWindow();
             vAc.close();
         }catch(IOException e ){
-            System.out.println("Error al cargar la ventana de Home: " + e.getMessage());
+
         }
     }
 }

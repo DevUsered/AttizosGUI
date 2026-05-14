@@ -11,7 +11,7 @@ public class Reserva {
     private LocalDateTime fecha;
     private String observaciones;
     private int numeroMesa;
-    private String estado; // "Pendiente", "Confirmada", "Cancelada"
+    private String estado;
 
     public Reserva(String id, String nombreCliente, String telefono, int cantidadPersonas, LocalDateTime fechaHora, String observaciones) {
         this.id = id;

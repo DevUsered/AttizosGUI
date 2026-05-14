@@ -21,9 +21,7 @@ public class Factura {
         this.total = 0.0;
     }
 
-    // Método para agregar un producto a la factura
-    // Método para agregar un producto a la factura
-    // Método para agregar un producto a la factura
+
     public boolean agregarProducto(Producto producto, int cantidad, Inventario inventario) {
         if(producto != null && cantidad > 0){
             // CASO A: EL PRODUCTO SE COCINA (TIENE RECETA)
@@ -208,7 +206,7 @@ public class Factura {
         }
     }
 
-    // Método para imprimir la factura en la consola (puro texto)
+
     public void imprimirFactura() {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String fechaStr = fecha.format(formato);
@@ -259,5 +257,45 @@ public class Factura {
 
     public double getTotal() {
         return total;
+    }
+    public String generarTicket(){
+        StringBuilder sb = new StringBuilder();
+        java.time.format.DateTimeFormatter formato = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        String fechaStr = fecha.format(formato);
+
+        sb.append("\n=========================================\n");
+        sb.append("             RESTAURANTE ATTIZOS         \n");
+        sb.append("=========================================\n");
+        sb.append(String.format("                  %03d\n", numeroFactura));
+        sb.append("-----------------------------------------\n");
+        sb.append("Fecha:       ").append(fechaStr).append("\n");
+        sb.append("Cliente:     ").append(nombreCliente).append("\n");
+        sb.append("-----------------------------------------\n");
+        sb.append(String.format("%-5s | %-20s | %-10s\n", "CANT", "PRODUCTO", "SUBTOTAL"));
+        sb.append("-----------------------------------------\n");
+
+        NodoDE<DetalleFactura> actual = detalles.getCabeza();
+        if (actual == null) {
+            sb.append("        (Sin productos registrados)      \n");
+        } else {
+            while (actual != null) {
+                DetalleFactura det = actual.getDato();
+                sb.append(String.format("%-5d | %-20.20s | Bs.%8.2f\n",
+                        det.getCantidad(), det.getProducto().getNombre(), det.getSubtotal()));
+                actual = actual.getSiguiente();
+            }
+        }
+        sb.append("-----------------------------------------\n");
+        sb.append(String.format("TOTAL A PAGAR:               Bs.%8.2f\n", total));
+        sb.append("=========================================\n");
+
+        return sb.toString();
+    }
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
+    public void setNumeroFactura(int numeroFactura) {
+        this.numeroFactura = numeroFactura;
     }
 }
